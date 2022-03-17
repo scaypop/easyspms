@@ -4,7 +4,18 @@ var sass = require("gulp-sass")(require("sass"));
 
 gulp.task("sass", function (cb) {
   gulp
-    .src("src/js-files/marcio-scripts/*.scss")
+    .src("src/js-files/**/*.scss")
+    .pipe(sass())
+    .pipe(
+      gulp.dest(function (f) {
+        return f.base;
+      })
+    );
+  cb();
+});
+gulp.task("sass", function (cb) {
+  gulp
+    .src("src/**/*.scss")
     .pipe(sass())
     .pipe(
       gulp.dest(function (f) {
@@ -17,7 +28,7 @@ gulp.task("sass", function (cb) {
 gulp.task(
   "default",
   gulp.series("sass", function (cb) {
-    gulp.watch("src/js-files/marcio-scripts/*.scss", gulp.series("sass"));
+    gulp.watch("src/**/*.scss", gulp.series("sass"));
     cb();
   })
 );

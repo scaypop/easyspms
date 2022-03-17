@@ -1,5 +1,5 @@
 //Pavlo
-import common from "../common.js";
+import common from "../utils/common.js";
 
 //Change space between letters
 export default function alterTextSpace(self, isIncrease) {
