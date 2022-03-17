@@ -1,0 +1,98 @@
+body {
+  position: static !important;
+  top: 0 !important;
+}
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  float: left;
+}
+
+ul {
+  width: 250px;
+}
+
+button {
+  color: #fff;
+  background: #000;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  margin: 5px;
+  border: none;
+}
+
+button:focus {
+  color: black;
+  background: white;
+}
+
+/* dicioTooltip container */
+.dicioTooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* dicioTooltip text */
+.dicioTooltip .dicioTooltipText {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  font-size: 1rem;
+  /* Position the dicioTooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the dicioTooltip text when you mouse over the dicioTooltip container */
+.dicioTooltip:hover .dicioTooltipText {
+  visibility: visible;
+  width: 400px;
+  bottom: 120%;
+  overflow: auto;
+  max-height: 300px;
+  left: 50%;
+  margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.dicioTooltipText::-webkit-scrollbar {
+  width: 10px; /* color of the tracking area */
+}
+
+/* Track */
+.dicioTooltipText::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.dicioTooltipText::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+.dicioTooltipText::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+}
+#goog-gt-tt {
+  display: none !important;
+  visibility: hidden !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: 0px 0px 0px transparent !important;
+}

@@ -1,0 +1,7 @@
+@media screen and (max-width: 960px) {
+  /* a possibilidade de chamar o teclado fica restrita no mobile  */
+  #links_do_navegador_da_esquerda #botao_do_teclado_virtual {
+    display: none;
+    /*display: block;*/
+  }
+}

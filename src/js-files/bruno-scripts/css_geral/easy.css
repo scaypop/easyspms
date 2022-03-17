@@ -1,0 +1,46 @@
+/* ---------------------------------------
+
+				EASY ICON BEGIN
+
+-----------------------------------------*/
+.imagem_svg_easy {
+  text-rendering: geometricPrecision !important;
+  width: 30px;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+}
+.imagem_svg_easy:hover {
+  background-color: transparent;
+  fill: green;
+}
+.preenchimento_do_easy {
+  fill: lightgreen;
+}
+#icone_do_easy {
+  transition: all 0.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+}
+#icone_do_easy a {
+  margin: 0 auto;
+}
+#botao_do_easy {
+  margin-left: 0px;
+  left: -7px;
+  z-index: 8;
+  top: 25%;
+}
+.cantos_redondos {
+  border-radius: 0px 40px 40px 0px;
+}
+/* ---------------------------------------
+				EASY ICON END
+-----------------------------------------*/

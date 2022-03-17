@@ -1,0 +1,166 @@
+#marcio-playground {
+  /*Nav Contraste*/
+  .row {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .container {
+    width: 1024px;
+    margin: auto;
+    overflow: hidden;
+    display: block;
+  }
+
+  .row-header {
+    background: #282e3a;
+    position: relative;
+    z-index: 1;
+    top: 0;
+  }
+
+  nav ul li {
+    float: left;
+    list-style: none;
+  }
+
+  nav ul li a {
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 17px;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  nav ul li a[data-contraste="0"] {
+    background: #FFFFFF;
+    color: #000000;
+  }
+
+  .row-top {
+    background: #64c4e8;
+    color: #FFFFFF;
+  }
+
+  .row-collors {
+    .container {
+      padding: 1.5% 0;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    &.white {
+      background: white;
+      color: #000000;
+    }
+
+    &.black {
+      background: black;
+      color: white;
+    }
+
+    &.red {
+      background: red;
+      color: black;
+    }
+
+    &.blue {
+      background: blue;
+      color: white;
+    }
+
+    &.green {
+      background: green;
+      color: black;
+    }
+  } 
+
+  .row-top .container {
+    padding: 1.5% 0;
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+  .row-content {
+    background: #282e3a;
+    color: #fdf210;
+  }
+
+  .row-content .container {
+    padding: 8% 0;
+  }
+
+  .row-content .box {
+    width: 46%;
+    margin: 4% 0;
+    float: left;
+    text-align: center;
+  }
+
+  .row-content .box h2 {
+    padding-bottom: 2%;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+  }
+
+  .row-content .box i {
+    font-style: normal;
+    color: #fdf210;
+    font: 1em;
+  }
+
+  .row-content .box p {
+    color: #FFFFFF;
+    padding: 2%;
+  }
+
+  footer {
+    padding: 3% 0;
+  }
+}
+  /*START - Contraste Claro*/
+
+  #contrasteClaro {
+    .row-collors {
+      border-top: 1px solid #0a0a0a;
+      background: #FFFFFF !important;
+      color: #000000 !important;
+    }
+  }
+
+  #contrasteEscuro {
+    .row-collors {
+      border-top: 1px solid #FFFFFF;
+      background: #000000 !important;
+      color: #FFFFFF !important;
+    }
+  }
+
+  #altoContraste {
+    .row-collors {
+      &.white {
+        background: white;
+        color: #000000;
+      }
+  
+      &.black {
+        background: black;
+        color: white;
+      }
+  
+      &.red {
+        background: darkred !important;
+        color: white;
+      }
+  
+      &.blue {
+        background: darkblue !important;
+        color: white;
+      }
+  
+      &.green {
+        background: darkgreen !important;
+        color: white;
+      }
+    }
+  }

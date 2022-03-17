@@ -1,0 +1,132 @@
+#marcio-playground {
+  /*Nav Contraste*/
+}
+#marcio-playground .row {
+  width: 100%;
+  overflow: hidden;
+}
+#marcio-playground .container {
+  width: 1024px;
+  margin: auto;
+  overflow: hidden;
+  display: block;
+}
+#marcio-playground .row-header {
+  background: #282e3a;
+  position: relative;
+  z-index: 1;
+  top: 0;
+}
+#marcio-playground nav ul li {
+  float: left;
+  list-style: none;
+}
+#marcio-playground nav ul li a {
+  color: #ffffff;
+  display: inline-block;
+  padding: 17px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+#marcio-playground nav ul li a[data-contraste="0"] {
+  background: #ffffff;
+  color: #000000;
+}
+#marcio-playground .row-top {
+  background: #64c4e8;
+  color: #ffffff;
+}
+#marcio-playground .row-collors .container {
+  padding: 1.5% 0;
+  text-align: center;
+  font-size: 1.5em;
+}
+#marcio-playground .row-collors.white {
+  background: white;
+  color: #000000;
+}
+#marcio-playground .row-collors.black {
+  background: black;
+  color: white;
+}
+#marcio-playground .row-collors.red {
+  background: red;
+  color: black;
+}
+#marcio-playground .row-collors.blue {
+  background: blue;
+  color: white;
+}
+#marcio-playground .row-collors.green {
+  background: green;
+  color: black;
+}
+#marcio-playground .row-top .container {
+  padding: 1.5% 0;
+  text-align: center;
+  font-size: 1.5em;
+}
+#marcio-playground .row-content {
+  background: #282e3a;
+  color: #fdf210;
+}
+#marcio-playground .row-content .container {
+  padding: 8% 0;
+}
+#marcio-playground .row-content .box {
+  width: 46%;
+  margin: 4% 0;
+  float: left;
+  text-align: center;
+}
+#marcio-playground .row-content .box h2 {
+  padding-bottom: 2%;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+}
+#marcio-playground .row-content .box i {
+  font-style: normal;
+  color: #fdf210;
+  font: 1em;
+}
+#marcio-playground .row-content .box p {
+  color: #ffffff;
+  padding: 2%;
+}
+#marcio-playground footer {
+  padding: 3% 0;
+}
+
+/*START - Contraste Claro*/
+#contrasteClaro .row-collors {
+  border-top: 1px solid #0a0a0a;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+#contrasteEscuro .row-collors {
+  border-top: 1px solid #ffffff;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+#altoContraste .row-collors.white {
+  background: white;
+  color: #000000;
+}
+#altoContraste .row-collors.black {
+  background: black;
+  color: white;
+}
+#altoContraste .row-collors.red {
+  background: darkred !important;
+  color: white;
+}
+#altoContraste .row-collors.blue {
+  background: darkblue !important;
+  color: white;
+}
+#altoContraste .row-collors.green {
+  background: darkgreen !important;
+  color: white;
+}

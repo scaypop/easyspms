@@ -1,0 +1,89 @@
+.btn_geral {
+  width: 110px;
+  height: 110px;
+}
+
+.btn_imagem {
+  padding-top: 5px;
+}
+
+.btn_imagem img {
+  max-width: 100px;
+  max-height: 30px;
+}
+
+.btn_particular {
+  display: flex;
+}
+
+.check {
+  margin-left: 80px;
+  display: none;
+}
+
+.check img {
+  width: 20px;
+  margin-left: auto;
+}
+
+[data-tooltip] {
+  display: inline-block;
+  position: relative;
+  cursor: help;
+  padding: 5px;
+}
+
+[data-tooltip]:before {
+  content: attr(data-tooltip);
+  display: none;
+  position: absolute;
+  /*background: #000;*/
+  background: #0ccaf0;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  min-width: 100px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+[data-tooltip-position="bottom"]:before {
+  left: 50%;
+  -ms-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+[data-tooltip-position="bottom"]:before {
+  top: 100%;
+  margin-top: 6px;
+}
+
+[data-tooltip]:after {
+  content: "";
+  display: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+[data-tooltip-position="bottom"]:after {
+  left: 50%;
+  margin-left: -6px;
+}
+
+[data-tooltip-position="bottom"]:after {
+  top: 100%;
+  border-width: 0 6px 6px;
+  border-bottom-color: #000;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  display: block;
+  z-index: 50;
+}

@@ -1,0 +1,12 @@
+.Lupa h1,
+.Lupa h2,
+.Lupa h3,
+.Lupa h4,
+.Lupa a,
+.Lupa .col-12 {
+  font-size: calc(2.375rem + 1.5vw);
+}
+
+.Lupa button {
+  font-size: 30px;
+}

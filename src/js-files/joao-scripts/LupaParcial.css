@@ -1,0 +1,9 @@
+.LupaTexto:hover:after {
+  color: pink;
+  content: attr(title);
+  position: absolute;
+  top: 20px;
+  font-size: 20px;
+  background-color: yellow;
+  border: 1px solid black;
+}
