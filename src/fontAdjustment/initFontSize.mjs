@@ -1,5 +1,5 @@
 "use strict";
-import common from "../common.js";
+import common from "../utils/common.js";
 
 function initFontSize(self) {
   // store this values only once.

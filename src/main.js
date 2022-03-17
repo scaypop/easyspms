@@ -1,6 +1,6 @@
 "use strict";
-import common from "./common.js";
-import storage from "./storage.js";
+import common from "./utils/common.js";
+import storage from "./utils/storage.js";
 import {
   keyboardCss,
   virtualKeyboard,
@@ -167,13 +167,6 @@ export class Accessibility {
       });
     }
   }
-
-  // fontFallback() {
-  //   this.options.icon.useEmojis = true;
-  //   this.options.icon.fontFamily = null;
-  //   this.options.icon.img = "♿";
-  //   this.options.icon.fontClass = "";
-  // }
 
   disabledUnsupportedFeatures() {
     if (

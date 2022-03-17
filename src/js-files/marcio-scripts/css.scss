@@ -25,7 +25,7 @@
   }
 
   nav ul li a {
-    color: #FFFFFF;
+    color: #ffffff;
     display: inline-block;
     padding: 17px;
     font-size: 11px;
@@ -33,13 +33,13 @@
   }
 
   nav ul li a[data-contraste="0"] {
-    background: #FFFFFF;
+    background: #ffffff;
     color: #000000;
   }
 
   .row-top {
     background: #64c4e8;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 
   .row-collors {
@@ -73,7 +73,7 @@
       background: green;
       color: black;
     }
-  } 
+  }
 
   .row-top .container {
     padding: 1.5% 0;
@@ -110,7 +110,7 @@
   }
 
   .row-content .box p {
-    color: #FFFFFF;
+    color: #ffffff;
     padding: 2%;
   }
 
@@ -118,49 +118,49 @@
     padding: 3% 0;
   }
 }
-  /*START - Contraste Claro*/
+/*START - Contraste Claro*/
 
-  #contrasteClaro {
-    .row-collors {
-      border-top: 1px solid #0a0a0a;
-      background: #FFFFFF !important;
-      color: #000000 !important;
+#contrasteClaro {
+  .row-collors {
+    border-top: 1px solid #0a0a0a;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
+#contrasteEscuro {
+  .row-collors {
+    border-top: 1px solid #ffffff;
+    background: #000000 !important;
+    color: #ffffff !important;
+  }
+}
+
+#altoContraste {
+  .row-collors {
+    &.white {
+      background: white;
+      color: #000000;
+    }
+
+    &.black {
+      background: black;
+      color: white;
+    }
+
+    &.red {
+      background: darkred !important;
+      color: white;
+    }
+
+    &.blue {
+      background: darkblue !important;
+      color: white;
+    }
+
+    &.green {
+      background: darkgreen !important;
+      color: white;
     }
   }
-
-  #contrasteEscuro {
-    .row-collors {
-      border-top: 1px solid #FFFFFF;
-      background: #000000 !important;
-      color: #FFFFFF !important;
-    }
-  }
-
-  #altoContraste {
-    .row-collors {
-      &.white {
-        background: white;
-        color: #000000;
-      }
-  
-      &.black {
-        background: black;
-        color: white;
-      }
-  
-      &.red {
-        background: darkred !important;
-        color: white;
-      }
-  
-      &.blue {
-        background: darkblue !important;
-        color: white;
-      }
-  
-      &.green {
-        background: darkgreen !important;
-        color: white;
-      }
-    }
-  }
+}
