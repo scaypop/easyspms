@@ -787,7 +787,7 @@ export class Accessibility {
     if ("webkitSpeechRecognition" in window) {
       this.recognition = new webkitSpeechRecognition();
       this.recognition.continuous = true;
-      this.recognition.interimResults = true;
+      this.recognition.interimResults = false;
       this.recognition.onstart = () => {
         // TODO red color on mic icon
         console.log("listening . . .");
@@ -799,8 +799,8 @@ export class Accessibility {
       };
 
       this.recognition.onend = () => {
-        // this.body.classList.remove("_access-listening");
-        //console.log('onend listening');
+        this.body.classList.remove("_access-listening");
+        console.log("onend listening");
       };
 
       this.recognition.onresult = (event) => {
