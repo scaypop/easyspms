@@ -787,7 +787,7 @@ export class Accessibility {
     if ("webkitSpeechRecognition" in window) {
       this.recognition = new webkitSpeechRecognition();
       this.recognition.continuous = true;
-      this.recognition.interimResults = false;
+      this.recognition.interimResults = true;
       this.recognition.onstart = () => {
         // TODO red color on mic icon
         console.log("listening . . .");
@@ -833,6 +833,7 @@ export class Accessibility {
         }
       };
       this.recognition.lang = this.options.speechToTextLang;
+
       this.recognition.start();
     }
   }
