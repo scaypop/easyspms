@@ -85,18 +85,21 @@ button:focus {
   background: #555;
 }
 
-#dicioTootipBox {
+#accessibilityTootipBox {
   display: block;
   position: fixed;
   background: rgba(0, 0, 0, 0.9);
   color: transparent;
-  font-size: 14px;
+  font-size: 1rem;
   white-space: pre-wrap;
   padding: 10px;
   line-height: 1 !important;
+  width: auto;
   max-width: 50%;
   border-radius: 3px;
-  z-index: 2147483645;
+  max-height: 300px;
+  z-index: 45454564;
+  overflow: auto;
 }
 
 .goog-te-banner-frame {
