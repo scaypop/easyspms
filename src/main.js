@@ -9,6 +9,10 @@ import {
   keyboardNavigation,
   keyboardNavCss,
 } from "./keyboardNavigation/keyboardNavigation.mjs";
+import disabledUnsupportedFeatures from "../src/disabledUnsupportedFeatures/disabledUnsupportedFeatures.mjs";
+import disableUnsupportedModules from "../src/disableUnsupportedModules/disableUnsupportedModules.mjs";
+import parseKeys from "../src/parseKeys/parseKeys.mjs";
+import runHotkey from "../src/parseKeys/runHotkey.mjs";
 import resetLineHeight from "../src/fontAdjustment/resetLineHeight.mjs";
 import resetTextSpace from "../src/fontAdjustment/resetTextSpace.mjs";
 import resetTextSize from "../src/fontAdjustment/resetTextSize.mjs";
@@ -138,7 +142,7 @@ export class Accessibility {
       }
     }
 
-    this.disabledUnsupportedFeatures();
+    disabledUnsupportedFeatures(this);
     this.sessionState = {
       keyboardNav: false,
       callTecladoVirtual: false,
@@ -164,7 +168,7 @@ export class Accessibility {
                 `${this.options.icon.fontFamily} font was not loaded, using emojis instead`
               );
               fontFallback(this);
-              this.destroy();
+              this.destroyAll();
               this.build();
             }
           });
@@ -173,25 +177,6 @@ export class Accessibility {
     }
   }
 
-  disabledUnsupportedFeatures() {
-    if (
-      !("webkitSpeechRecognition" in window) ||
-      location.protocol != "https:"
-    ) {
-      common.warn(
-        "speech to text isn't supported in this browser or in http protocol (https required)"
-      );
-      this.options.modules.speechToText = false;
-    }
-    if (!window.SpeechSynthesisUtterance || !window.speechSynthesis) {
-      common.warn("text to speech isn't supported in this browser");
-      this.options.modules.textToSpeech = false;
-    }
-    if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
-      common.warn("grayHues isn't supported in firefox");
-      this.options.modules.grayHues = false;
-    }
-  }
   //injetar estilos
   injectCss() {
     let css =
@@ -493,21 +478,6 @@ export class Accessibility {
     return iconElem;
   }
 
-  parseKeys(arr) {
-    return this.options.hotkeys.enabled
-      ? this.options.hotkeys.helpTitles
-        ? "Hotkey: " +
-          arr
-            .map(function (val) {
-              return Number.isInteger(val)
-                ? String.fromCharCode(val).toLowerCase()
-                : val.replace("Key", "");
-            })
-            .join("+")
-        : ""
-      : "";
-  }
-  // injetar menu accessibilidade
   injectMenu() {
     let menuElem = common.jsonToHtml({
       type: "div",
@@ -664,7 +634,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "invertColors",
-                title: this.parseKeys(this.options.hotkeys.keys.invertColors),
+                title: parseKeys(this, this.options.hotkeys.keys.invertColors),
               },
               children: [
                 {
@@ -677,7 +647,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "grayHues",
-                title: this.parseKeys(this.options.hotkeys.keys.grayHues),
+                title: parseKeys(this, this.options.hotkeys.keys.grayHues),
               },
               children: [
                 {
@@ -690,7 +660,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "linkHighlight",
-                title: this.parseKeys(this.options.hotkeys.keys.linkHighlight),
+                title: parseKeys(this, this.options.hotkeys.keys.linkHighlight),
               },
               children: [
                 {
@@ -703,7 +673,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "bigCursor",
-                title: this.parseKeys(this.options.hotkeys.keys.bigCursor),
+                title: parseKeys(this, this.options.hotkeys.keys.bigCursor),
               },
               children: [
                 {
@@ -722,7 +692,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "readingGuide",
-                title: this.parseKeys(this.options.hotkeys.keys.readingGuide),
+                title: parseKeys(this, this.options.hotkeys.keys.readingGuide),
               },
               children: [
                 {
@@ -787,19 +757,6 @@ export class Accessibility {
     return menuElem;
   }
 
-  disableUnsupportedModules() {
-    for (let i in this.options.modules) {
-      if (!this.options.modules[i]) {
-        let moduleLi = document.querySelector(
-          'li[data-access-action="' + i + '"]'
-        );
-        if (moduleLi) {
-          moduleLi.classList.add("not-supported");
-        }
-      }
-    }
-  }
-
   resetAll() {
     //window.location.reload();
     this.menuInterface.textToSpeech(true);
@@ -833,14 +790,16 @@ export class Accessibility {
       this.recognition.interimResults = true;
       this.recognition.onstart = () => {
         // TODO red color on mic icon
-        //console.log('listening . . .');
-        // if (this.speechToTextTarget)
-        //     this.speechToTextTarget.parentElement.classList.add('_access-listening');
+        console.log("listening . . .");
+        if (this.speechToTextTarget)
+          this.speechToTextTarget.parentElement.classList.add(
+            "_access-listening"
+          );
         this.body.classList.add("_access-listening");
       };
 
       this.recognition.onend = () => {
-        this.body.classList.remove("_access-listening");
+        // this.body.classList.remove("_access-listening");
         //console.log('onend listening');
       };
 
@@ -879,9 +838,9 @@ export class Accessibility {
     }
   }
   listen() {
-    // let className = '_access-speech-to-text';
-    // window.event.preventDefault();
-    // window.event.stopPropagation();
+    // let className = "_access-speech-to-text";
+    window.event.preventDefault();
+    window.event.stopPropagation();
     if (
       typeof self.recognition === "object" &&
       typeof self.recognition.stop === "function"
@@ -892,20 +851,6 @@ export class Accessibility {
     self.speechToText(window.event.target.innerText);
   }
 
-  runHotkey(name) {
-    switch (name) {
-      case "toggleMenu":
-        this.toggleMenu();
-        break;
-      default:
-        if (this.menuInterface.hasOwnProperty(name)) {
-          if (this.options.modules[name]) {
-            this.menuInterface[name](false);
-          }
-        }
-        break;
-    }
-  }
   toggleMenu() {
     if (this.menu.classList.contains("close")) {
       if (this.options.animations && this.options.animations.buttons)
@@ -948,7 +893,7 @@ export class Accessibility {
     this.icon = this.injectIcon();
     this.menu = this.injectMenu();
     addListeners(this);
-    this.disableUnsupportedModules();
+    disableUnsupportedModules(this);
     if (this.options.hotkeys.enabled) {
       document.onkeydown = function (e) {
         let act = Object.entries(self.options.hotkeys.keys).find(function (
@@ -969,7 +914,7 @@ export class Accessibility {
           return pass;
         });
         if (act != undefined) {
-          self.runHotkey(act[0]);
+          runHotkey(self, act[0]);
         }
       };
     }
@@ -1376,7 +1321,7 @@ export class Accessibility {
     }
   }
 
-  destroy() {
+  destroyAll() {
     let allSelectors = common.deployedObjects.getAll();
     for (let i of allSelectors) {
       let elem = document.querySelector(i);
