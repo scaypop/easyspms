@@ -28,13 +28,15 @@
   }
 
   function _onMouseMoveForTootip(event) {
-    _showTootip()
+    _showTootip();
+
     if (event.x <= window.innerWidth / 2) {
       accessibilityTootipBox.style.left = `${event.x + 20}px`;
       accessibilityTootipBox.style.right = "auto";
     } else {
-      accessibilityTootipBox.style.right = `${window.innerWidth - event.x + 20
-        }px`;
+      accessibilityTootipBox.style.right = `${
+        window.innerWidth - event.x + 20
+      }px`;
       accessibilityTootipBox.style.left = "auto";
     }
   }
@@ -132,7 +134,10 @@
 
     let onMouseEnterWord = (wordEvent) => {
       wordEvent.target.style.backgroundColor = "red";
-
+      // _onMouseMoveForTootip(wordEvent)
+      // _setCustomStyleTootip({
+      //   top: `${wordEvent.y - wordEvent.target.offsetHeight * 2}px`,
+      // });
       _setTootipText("Procurando siginificado...");
 
       fetchMeaningTimeOut = setTimeout(() => {
@@ -172,13 +177,15 @@
         .json()
         .then((jsonResponse) => {
           if (!!jsonResponse.length) {
-            let meanings = jsonResponse[0].meanings.join("<br>");
+            let meanings = jsonResponse[0].meanings.slice(0, 3).join("<br>");
+
             _setTootipText(meanings);
             let currentTopValue = parseInt(accessibilityTootipBox.style.top);
 
             _setCustomStyleTootip({
-              top: `${currentTopValue - (accessibilityTootipBox.offsetHeight - 50)
-                }px`,
+              top: `${
+                currentTopValue - (accessibilityTootipBox.offsetHeight - 50)
+              }px`,
             });
           } else {
             _setTootipText("Siginificado não foi localizado.");
@@ -195,18 +202,6 @@
    * @param {MouseEvent} event
    */
   function _dicioHandleMouseLeave(event) {
-    // let words = event.target.getElementsByTagName("diciotext");
-    // for (const word of words) {
-    //   word.addEventListener("mouseout", (wordEvent) => {
-    //     accessibilityTootipBox.style.display = "none";
-    //     accessibilityTootipBox.style.color = "transparent";
-    //     word.removeEventListener("mousemove", onMouseMoveWord);
-    //     word.removeEventListener("mouseenter", onMouseEnterWord);
-    //     console.log("saiu");
-    //     wordEvent.target.style.backgroundColor = "";
-    //   });
-    // }
-
     event.target.innerHTML = event.target.innerText;
   }
 
@@ -228,6 +223,7 @@
       text.removeEventListener("mouseenter", _diciohandleMouseEnter);
       text.removeEventListener("mouseleave", _dicioHandleMouseLeave);
     }
+    _hideTootip();
   }
 
   /**
@@ -360,6 +356,7 @@
       image.removeEventListener("mouseenter", _imageMouseEnter);
       image.removeEventListener("mouseout", _imageMouseOut);
     }
+    _hideTootip();
   }
 
   /**

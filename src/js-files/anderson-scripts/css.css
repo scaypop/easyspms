@@ -97,7 +97,7 @@ button:focus {
   width: auto;
   max-width: 50%;
   border-radius: 3px;
-  max-height: 300px;
+  max-height: auto;
   z-index: 45454564;
   overflow: auto;
 }
