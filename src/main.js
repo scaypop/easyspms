@@ -799,7 +799,7 @@ export class Accessibility {
       };
 
       this.recognition.onend = () => {
-        this.body.classList.remove("_access-listening");
+        // this.body.classList.remove("_access-listening");
         //console.log('onend listening');
       };
 
