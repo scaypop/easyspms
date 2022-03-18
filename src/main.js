@@ -95,7 +95,7 @@ let _options = {
     readingGuide: "Guia de leitura",
     linkHighlight: "Destaque e inks",
     textToSpeech: "Leia Texto",
-    speechToText: "speech to text",
+    speechToText: "Voz para Texto",
   },
   // textToSpeechLang: "pt-PT",
   speechToTextLang: "pt-PT",
@@ -787,7 +787,7 @@ export class Accessibility {
     if ("webkitSpeechRecognition" in window) {
       this.recognition = new webkitSpeechRecognition();
       this.recognition.continuous = true;
-      this.recognition.interimResults = false;
+      this.recognition.interimResults = true;
       this.recognition.onstart = () => {
         // TODO red color on mic icon
         console.log("listening . . .");
@@ -812,10 +812,9 @@ export class Accessibility {
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript;
+          } else {
+            interim_transcript += event.results[i][0].transcript;
           }
-          // else {
-          //     interim_transcript += event.results[i][0].transcript;
-          // }
         }
         if (finalTranscript && this.speechToTextTarget) {
           this.speechToTextTarget.parentElement.classList.remove(
@@ -834,13 +833,14 @@ export class Accessibility {
         }
       };
       this.recognition.lang = this.options.speechToTextLang;
+
       this.recognition.start();
     }
   }
   listen() {
     // let className = "_access-speech-to-text";
-    window.event.preventDefault();
-    window.event.stopPropagation();
+    // window.event.preventDefault();
+    // window.event.stopPropagation();
     if (
       typeof self.recognition === "object" &&
       typeof self.recognition.stop === "function"
