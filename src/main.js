@@ -838,9 +838,9 @@ export class Accessibility {
     }
   }
   listen() {
-    // let className = '_access-speech-to-text';
-    // window.event.preventDefault();
-    // window.event.stopPropagation();
+    // let className = "_access-speech-to-text";
+    window.event.preventDefault();
+    window.event.stopPropagation();
     if (
       typeof self.recognition === "object" &&
       typeof self.recognition.stop === "function"
