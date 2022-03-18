@@ -9,12 +9,17 @@ import {
   keyboardNavigation,
   keyboardNavCss,
 } from "./keyboardNavigation/keyboardNavigation.mjs";
+import resetLineHeight from "../src/fontAdjustment/resetLineHeight.mjs";
+import resetTextSpace from "../src/fontAdjustment/resetTextSpace.mjs";
+import resetTextSize from "../src/fontAdjustment/resetTextSize.mjs";
 import fontFallback from "../src/fontAdjustment/fontFallback.mjs";
 import initFontSize from "../src/fontAdjustment/initFontSize.mjs";
 import alterLineHeight from "../src/fontAdjustment/alternateLineHeight.mjs";
 import alterTextSpace from "../src/fontAdjustment/alternateTextSpace.mjs";
 import alterTextSize from "../src/fontAdjustment/alternateTextSize.mjs";
 import linkHighlight from "../src/linkHighlight/linkHighlight.mjs";
+import textToSpeech from "../src/textToSpeech/textToSpeech.mjs";
+import addListeners from "../src/addListeners/addListeners.mjs";
 
 // const fonts = ['https://fonts.googleapis.com/icon?family=Material+Icons'];
 // common.injectIconsFont(fonts);
@@ -109,7 +114,7 @@ let _options = {
     readingGuide: true,
     linkHighlight: true,
     textToSpeech: true,
-    speechToText: false,
+    speechToText: true,
   },
   session: {
     persistent: true,
@@ -570,7 +575,6 @@ export class Accessibility {
                 },
               ],
             },
-            //------------
             {
               type: "li",
               attrs: {
@@ -783,21 +787,6 @@ export class Accessibility {
     return menuElem;
   }
 
-  addListeners() {
-    let lis = document.querySelectorAll("._access-menu ul li");
-
-    for (let i = 0; i < lis.length; i++) {
-      lis[i].addEventListener(
-        "click",
-        (e) => {
-          let evt = e || window.event;
-          this.invoke(evt.target.getAttribute("data-access-action"));
-        },
-        false
-      );
-    }
-  }
-
   disableUnsupportedModules() {
     for (let i in this.options.modules) {
       if (!this.options.modules[i]) {
@@ -820,9 +809,9 @@ export class Accessibility {
     this.menuInterface.invertColors(true);
     this.menuInterface.bigCursor(true);
     this.menuInterface.readingGuide(true);
-    this.resetLineHeight();
-    this.resetTextSize();
-    this.resetTextSpace();
+    resetLineHeight(this);
+    resetTextSize(this);
+    resetTextSpace(this);
     for (let i of document.querySelectorAll("._access-menu ul li.active")) {
       i.classList.remove("active");
     }
@@ -836,106 +825,6 @@ export class Accessibility {
   callKeyboardNav() {
     keyboardNavigation();
   }
-
-  resetTextSize() {
-    this.resetIfDefined(
-      this.initialValues.body.fontSize,
-      this.body.style,
-      "fontSize"
-    );
-    if (typeof this.htmlOrgFontSize !== "undefined")
-      this.html.style.fontSize = this.htmlOrgFontSize;
-    let all = document.querySelectorAll("[data-init-font-size]");
-
-    for (let i = 0; i < all.length; i++) {
-      all[i].style.fontSize = all[i].getAttribute("data-init-font-size");
-      all[i].removeAttribute("data-init-font-size");
-    }
-
-    this.sessionState.textSize = 0;
-    this.onChange(true);
-  }
-
-  resetLineHeight() {
-    this.resetIfDefined(
-      this.initialValues.body.lineHeight,
-      this.body.style,
-      "lineHeight"
-    );
-    let all = document.querySelectorAll("[data-init-line-height]");
-
-    for (let i = 0; i < all.length; i++) {
-      all[i].style.lineHeight = all[i].getAttribute("data-init-line-height");
-      all[i].removeAttribute("data-init-line-height");
-    }
-
-    this.sessionState.lineHeight = 0;
-    this.onChange(true);
-  }
-
-  resetTextSpace() {
-    this.resetIfDefined(
-      this.initialValues.body.wordSpacing,
-      this.body.style,
-      "wordSpacing"
-    );
-    this.resetIfDefined(
-      this.initialValues.body.letterSpacing,
-      this.body.style,
-      "letterSpacing"
-    );
-    let all = document.querySelectorAll("[data-init-word-spacing]");
-    let all2 = document.querySelectorAll("[data-init-letter-spacing]");
-
-    for (let i = 0; i < all.length; i++) {
-      all[i].style.wordSpacing = all[i].getAttribute("data-init-word-spacing");
-      all[i].removeAttribute("data-init-word-spacing");
-    }
-    for (let i = 0; i < all2.length; i++) {
-      all[i].style.letterSpacing = all[i].getAttribute(
-        "data-init-letter-spacing"
-      );
-      all[i].removeAttribute("data-init-letter-spacing");
-    }
-
-    this.sessionState.textSpace = 0;
-    this.onChange(true);
-  }
-
-  // alterLineHeight(isIncrease) {
-  //   this.sessionState.lineHeight += isIncrease ? 1 : -1;
-  //   this.onChange(true);
-  //   let factor = 3;
-  //   if (!isIncrease) factor *= -1;
-  //   if (this.options.textPixelMode || this.options.textEmlMode) {
-  //     let all = document.querySelectorAll("*:not(._access)");
-  //     for (let i = 0; i < all.length; i++) {
-  //       let lineHeightSize = getComputedStyle(all[i]).lineHeight;
-  //       if (lineHeightSize && lineHeightSize.indexOf("px") > -1) {
-  //         if (!all[i].getAttribute("data-init-line-height"))
-  //           all[i].setAttribute("data-init-line-height", lineHeightSize);
-  //         lineHeightSize = lineHeightSize.replace("px", "") * 1 + factor;
-  //         all[i].style.lineHeight = lineHeightSize + "px";
-  //       }
-  //     }
-  //     let fp = this.html.style.lineHeight;
-  //     if (fp.indexOf("%")) {
-  //       fp = fp.replace("%", "") * 1;
-  //       this.html.style.lineHeight = fp + factor + "%";
-  //     } else {
-  //       common.warn("Accessibility.textEmlMode, html element is not set in %.");
-  //     }
-  //   } else {
-  //     let fSize = common.getFormattedDimentions(
-  //       getComputedStyle(this.body).lineHeight
-  //     );
-  //     if (typeof this.initialValues.body.lineHeight === "undefined")
-  //       this.initialValues.body.lineHeight = fSize.size + fSize.sufix;
-  //     if (fSize && fSize.sufix && !isNaN(fSize.size * 1)) {
-  //       this.body.style.lineHeight = fSize.size * 1 + factor + fSize.sufix;
-  //     }
-  //   }
-  // }
 
   speechToText() {
     if ("webkitSpeechRecognition" in window) {
@@ -989,31 +878,6 @@ export class Accessibility {
       this.recognition.start();
     }
   }
-
-  textToSpeech(text) {
-    if (!window.SpeechSynthesisUtterance || !window.speechSynthesis) return;
-    let msg = new window.SpeechSynthesisUtterance(text);
-    msg.lang = this.options.textToSpeechLang;
-    let voices = window.speechSynthesis.getVoices();
-    let isLngSupported = false;
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].lang === msg.lang) {
-        msg.voice = voices[i];
-        isLngSupported = true;
-        break;
-      }
-    }
-    if (!isLngSupported) {
-      common.warn("text to speech language not supported!");
-      // let msg = 'text to speech language not supported!';
-      // if (console.warn)
-      //     console.warn(msg);
-      // else
-      //     console.log(msg);
-    }
-    window.speechSynthesis.speak(msg);
-  }
-
   listen() {
     // let className = '_access-speech-to-text';
     // window.event.preventDefault();
@@ -1028,16 +892,6 @@ export class Accessibility {
     self.speechToText(window.event.target.innerText);
   }
 
-  read(e) {
-    try {
-      e = window.event || e || arguments[0];
-      if (e && e.preventDefault) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    } catch (ex) {}
-    self.textToSpeech(window.event.target.innerText);
-  }
   runHotkey(name) {
     switch (name) {
       case "toggleMenu":
@@ -1075,11 +929,6 @@ export class Accessibility {
     }
   }
 
-  invoke(action) {
-    if (typeof this.menuInterface[action] === "function")
-      this.menuInterface[action]();
-  }
-
   build() {
     this.initialValues = {
       linkHighlight: false,
@@ -1098,7 +947,7 @@ export class Accessibility {
     this.injectCss();
     this.icon = this.injectIcon();
     this.menu = this.injectMenu();
-    this.addListeners();
+    addListeners(this);
     this.disableUnsupportedModules();
     if (this.options.hotkeys.enabled) {
       document.onkeydown = function (e) {
@@ -1366,44 +1215,7 @@ export class Accessibility {
         }
       },
       textToSpeech: (destroy) => {
-        this.sessionState.textToSpeech =
-          typeof destroy === "undefined" ? true : false;
-        this.onChange(false);
-        let className = "_access-text-to-speech";
-        let remove = () => {
-          let style = document.querySelector("." + className);
-          if (style) {
-            style.parentElement.removeChild(style);
-            document.removeEventListener("click", this.read, false);
-            common.deployedObjects.remove("." + className);
-          }
-        };
-
-        if (destroy) {
-          document
-            .querySelector('._access-menu [data-access-action="textToSpeech"]')
-            .classList.remove("active");
-          this.initialValues.textToSpeech = false;
-          return remove();
-        }
-
-        document
-          .querySelector('._access-menu [data-access-action="textToSpeech"]')
-          .classList.toggle("active");
-
-        this.initialValues.textToSpeech = !this.initialValues.textToSpeech;
-        if (this.initialValues.textToSpeech) {
-          let css = `
-                        *:hover {
-                            box-shadow: 2px 2px 2px rgba(180,180,180,0.7);
-                        }
-                    `;
-          common.injectStyle(css, { className: className });
-          common.deployedObjects.set("." + className, true);
-          document.addEventListener("click", this.read, false);
-        } else {
-          remove();
-        }
+        textToSpeech(this, destroy);
       },
       speechToText: (destroy) => {
         // this.sessionState.speechToText = typeof destroy === 'undefined' ? true : false;

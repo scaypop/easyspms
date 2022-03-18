@@ -1,5 +1,3 @@
-//Pavlo
-
 //Change Text size
 export default function alterTextSize(self, isIncrease) {
   self.sessionState.textSize += isIncrease ? 1 : -1;

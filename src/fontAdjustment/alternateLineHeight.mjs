@@ -1,5 +1,3 @@
-//Pavlo
-
 //Change Text size
 export default function alterLineHeight(self, isIncrease) {
   self.sessionState.lineHeight += isIncrease ? 1 : -1;
