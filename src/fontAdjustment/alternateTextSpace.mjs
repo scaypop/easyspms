@@ -1,4 +1,3 @@
-//Pavlo
 import common from "../utils/common.js";
 
 //Change space between letters

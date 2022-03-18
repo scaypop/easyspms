@@ -5,7 +5,6 @@ module.exports = {
   mode: "production",
   output: {
     path: path.resolve(__dirname, "site/script"),
-    // library: "./site/script",
     libraryTarget: "umd",
     filename: "accessibility.min.js",
     auxiliaryComment: "accessibility output",
