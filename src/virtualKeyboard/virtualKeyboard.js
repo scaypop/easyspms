@@ -41,13 +41,13 @@ export const construtor_teclado_virtual = {
     document.body.appendChild(this.elements.main);
 
     // Automatically use keyboard for elements with .use-keyboard-input
-    document.querySelectorAll(".use-keyboard-input").forEach((element) => {
-      element.addEventListener("focus", () => {
-        this.open(element.value, (currentValue) => {
-          element.value = currentValue;
-        });
-      });
-    });
+    // document.querySelectorAll(".use-keyboard-input").forEach((element) => {
+    //   element.addEventListener("focus", () => {
+    //     this.open(element.value, (currentValue) => {
+    //       element.value = currentValue;
+    //     });
+    //   });
+    // });
   },
 
   _createKeys() {
@@ -250,6 +250,7 @@ export const construtor_teclado_virtual = {
 })();
 
 construtor_teclado_virtual._isMobile();
+
 export function virtualKeyboard() {
   $(".keyboard").hasClass("keyboard--hidden")
     ? construtor_teclado_virtual.open()

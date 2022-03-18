@@ -1,4 +1,3 @@
-// Joao
 export function keyboardNavigation() {
   if ($("body").hasClass("KeyboardNavigation")) {
     $("body").removeClass("KeyboardNavigation");
