@@ -9,10 +9,12 @@ import {
   keyboardNavigation,
   keyboardNavCss,
 } from "./keyboardNavigation/keyboardNavigation.mjs";
-import disabledUnsupportedFeatures from "../src/disabledUnsupportedFeatures/disabledUnsupportedFeatures.mjs";
-import disableUnsupportedModules from "../src/disableUnsupportedModules/disableUnsupportedModules.mjs";
-import parseKeys from "../src/parseKeys/parseKeys.mjs";
-import runHotkey from "../src/parseKeys/runHotkey.mjs";
+import disabledUnsupportedFeatures from "../src/utils/disabledUnsupportedFeatures/disabledUnsupportedFeatures.mjs";
+import disableUnsupportedModules from "../src/utils/disableUnsupportedModules/disableUnsupportedModules.mjs";
+import setSessionFromCache from "../src/utils/setSessionFromCache/setSessionFromCache.mjs";
+import destroyAll from "../src/utils/destroyAll/destroyAll.mjs";
+import parseKeys from "../src/utils/parseKeys/parseKeys.mjs";
+import runHotkey from "../src/utils/parseKeys/runHotkey.mjs";
 import resetLineHeight from "../src/fontAdjustment/resetLineHeight.mjs";
 import resetTextSpace from "../src/fontAdjustment/resetTextSpace.mjs";
 import resetTextSize from "../src/fontAdjustment/resetTextSize.mjs";
@@ -23,10 +25,10 @@ import alterTextSpace from "../src/fontAdjustment/alternateTextSpace.mjs";
 import alterTextSize from "../src/fontAdjustment/alternateTextSize.mjs";
 import linkHighlight from "../src/linkHighlight/linkHighlight.mjs";
 import textToSpeech from "../src/textToSpeech/textToSpeech.mjs";
-import addListeners from "../src/addListeners/addListeners.mjs";
+import addListeners from "../src/utils/addListeners/addListeners.mjs";
 
 // const fonts = ['https://fonts.googleapis.com/icon?family=Material+Icons'];
-// common.injectIconsFont(fonts);
+// common.injectFont(fonts);
 // Default options
 let _options = {
   icon: {
@@ -155,26 +157,21 @@ export class Accessibility {
       bigCursor: false,
       readingGuide: false,
     };
-    if (this.options.icon.useEmojis) {
-      fontFallback(this);
+    common.injectFont(this.options.icon.fontFaceSrc, () => {
       this.build();
-    } else {
-      common.injectIconsFont(this.options.icon.fontFaceSrc, () => {
-        this.build();
-        if (!this.options.icon.forceFont) {
-          common.isFontLoaded(this.options.icon.fontFamily, (isLoaded) => {
-            if (!isLoaded) {
-              common.warn(
-                `${this.options.icon.fontFamily} font was not loaded, using emojis instead`
-              );
-              fontFallback(this);
-              this.destroyAll();
-              this.build();
-            }
-          });
-        }
-      });
-    }
+      if (!this.options.icon.forceFont) {
+        common.isFontLoaded(this.options.icon.fontFamily, (isLoaded) => {
+          if (!isLoaded) {
+            common.warn(
+              `${this.options.icon.fontFamily} font was not loaded, using emojis instead`
+            );
+            fontFallback(this);
+            destroyAll();
+            this.build();
+          }
+        });
+      }
+    });
   }
 
   //injetar estilos
@@ -501,7 +498,7 @@ export class Accessibility {
               children: [
                 {
                   type: "#text",
-                  text: `${!this.options.icon.useEmojis ? "close" : "X"}`,
+                  text: "close",
                 },
               ],
             },
@@ -519,7 +516,7 @@ export class Accessibility {
               children: [
                 {
                   type: "#text",
-                  text: `${!this.options.icon.useEmojis ? "refresh" : "♲"}`,
+                  text: "refresh",
                 },
               ],
             },
@@ -1216,16 +1213,7 @@ export class Accessibility {
         if (this.initialValues.speechToText) {
           let css = `
                         body:after {
-                            content: ${
-                              !this.options.icon.useEmojis ? '"mic"' : '"🎤"'
-                            };
-                            ${
-                              !this.options.icon.useEmojis
-                                ? "font-family: '" +
-                                  this.options.icon.fontFamily +
-                                  "';"
-                                : ""
-                            }
+                            content: "🎤";
                             position: fixed;
                             z-index: 1100;
                             top: 1vw;
@@ -1275,7 +1263,7 @@ export class Accessibility {
         }
       },
     };
-    if (this.options.session.persistent) this.setSessionFromCache();
+    if (this.options.session.persistent) setSessionFromCache(this);
   }
 
   resetIfDefined(src, dest, prop) {
@@ -1283,69 +1271,8 @@ export class Accessibility {
   }
 
   onChange(updateSession) {
-    if (updateSession && this.options.session.persistent) this.saveSession();
-  }
-
-  saveSession() {
-    storage.set("_accessState", this.sessionState);
-  }
-
-  setSessionFromCache() {
-    let sessionState = storage.get("_accessState");
-    if (sessionState) {
-      if (sessionState.textSize) {
-        let textSize = sessionState.textSize;
-        if (textSize > 0) {
-          while (textSize--) {
-            alterTextSize(this, true);
-          }
-        } else {
-          while (textSize++) {
-            alterTextSize(this, false);
-          }
-        }
-      }
-      if (sessionState.textSpace) {
-        let textSpace = sessionState.textSpace;
-        if (textSpace > 0) {
-          while (textSpace--) {
-            alterTextSpace(this, true);
-          }
-        } else {
-          while (textSpace++) {
-            alterTextSpace(this, false);
-          }
-        }
-      }
-      if (sessionState.lineHeight) {
-        let lineHeight = sessionState.lineHeight;
-        if (lineHeight > 0) {
-          while (lineHeight--) {
-            alterLineHeight(this, true);
-          }
-        } else {
-          while (lineHeight++) {
-            alterLineHeight(this, false);
-          }
-        }
-      }
-      if (sessionState.invertColors) this.menuInterface.invertColors();
-      if (sessionState.grayHues) this.menuInterface.grayHues();
-      if (sessionState.linkHighlight) this.menuInterface.linkHighlight();
-      if (sessionState.bigCursor) this.menuInterface.bigCursor();
-      if (sessionState.readingGuide) this.menuInterface.readingGuide();
-      this.sessionState = sessionState;
-    }
-  }
-
-  destroyAll() {
-    let allSelectors = common.deployedObjects.getAll();
-    for (let i of allSelectors) {
-      let elem = document.querySelector(i);
-      if (elem) {
-        elem.parentElement.removeChild(elem);
-      }
-    }
+    if (updateSession && this.options.session.persistent)
+      storage.set("_accessState", this.sessionState);
   }
 }
 

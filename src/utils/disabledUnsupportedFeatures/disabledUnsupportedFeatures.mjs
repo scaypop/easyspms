@@ -1,4 +1,4 @@
-import common from "../utils/common.js";
+import common from "../common.js";
 
 export default function disabledUnsupportedFeatures(self) {
   if (!("webkitSpeechRecognition" in window) || location.protocol != "https:") {
