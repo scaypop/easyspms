@@ -1,4 +1,3 @@
-//Joao
 import common from "../utils/common.js";
 
 export default function linkHighlight(self, destroy) {

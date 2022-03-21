@@ -73,7 +73,7 @@ let common = {
     }
     return src;
   },
-  injectIconsFont(urls, callback) {
+  injectFont(urls, callback) {
     if (urls && urls.length) {
       let head = document.getElementsByTagName("head")[0];
       let counter = 0;
