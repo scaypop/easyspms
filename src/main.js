@@ -4,6 +4,8 @@ import storage from "./utils/storage.js";
 import {
   keyboardCss,
   virtualKeyboard,
+  construtor_teclado_virtual,
+  vai_buscar_todos_campos_texto,
 } from "./virtualKeyboard/virtualKeyboard.js";
 import {
   keyboardNavigation,
@@ -12,13 +14,15 @@ import {
 import disabledUnsupportedFeatures from "../src/utils/disabledUnsupportedFeatures/disabledUnsupportedFeatures.mjs";
 import disableUnsupportedModules from "../src/utils/disableUnsupportedModules/disableUnsupportedModules.mjs";
 import setSessionFromCache from "../src/utils/setSessionFromCache/setSessionFromCache.mjs";
+import resetIfDefined from "../src/utils/resetIfDefined/resetIfDefined.mjs";
 import destroyAll from "../src/utils/destroyAll/destroyAll.mjs";
+import readingGuide from "../src/readingGuide/readingGuide.mjs";
+import fontFallback from "../src/fontAdjustment/fontFallback.mjs";
 import parseKeys from "../src/utils/parseKeys/parseKeys.mjs";
 import runHotkey from "../src/utils/parseKeys/runHotkey.mjs";
 import resetLineHeight from "../src/fontAdjustment/resetLineHeight.mjs";
 import resetTextSpace from "../src/fontAdjustment/resetTextSpace.mjs";
 import resetTextSize from "../src/fontAdjustment/resetTextSize.mjs";
-import fontFallback from "../src/fontAdjustment/fontFallback.mjs";
 import initFontSize from "../src/fontAdjustment/initFontSize.mjs";
 import alterLineHeight from "../src/fontAdjustment/alternateLineHeight.mjs";
 import alterTextSpace from "../src/fontAdjustment/alternateTextSpace.mjs";
@@ -27,8 +31,10 @@ import linkHighlight from "../src/linkHighlight/linkHighlight.mjs";
 import textToSpeech from "../src/textToSpeech/textToSpeech.mjs";
 import addListeners from "../src/utils/addListeners/addListeners.mjs";
 
-// const fonts = ['https://fonts.googleapis.com/icon?family=Material+Icons'];
-// common.injectFont(fonts);
+const bootstrap = [
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
+];
+common.injectFont(bootstrap);
 // Default options
 let _options = {
   icon: {
@@ -47,10 +53,11 @@ let _options = {
     circular: false,
     circularBorder: false,
     fontFaceSrc: ["https://fonts.googleapis.com/icon?family=Material+Icons"],
-    fontFamily: "Material+Icons",
+    fontFamily: "Material Icons",
     fontClass: "material-icons",
     useEmojis: false,
   },
+  ///
   hotkeys: {
     enabled: true,
     helpTitles: true,
@@ -99,7 +106,7 @@ let _options = {
     textToSpeech: "Leia Texto",
     speechToText: "Voz para Texto",
   },
-  // textToSpeechLang: "pt-PT",
+  textToSpeechLang: "pt-PT",
   speechToTextLang: "pt-PT",
   textPixelMode: false,
   textEmlMode: true,
@@ -131,18 +138,19 @@ let self = null;
 export class Accessibility {
   constructor(options = {}) {
     self = this;
-    this.options = common.extend(_options, options);
-    // Consider adding this:
-    if (options) {
-      if (
-        !options.textToSpeechLang &&
-        document.querySelector("html").getAttribute("lang")
-      ) {
-        this.options.textToSpeechLang = document
-          .querySelector("html")
-          .getAttribute("lang");
-      }
+    this.options = _options;
+
+    if (
+      !options.textToSpeechLang &&
+      document.querySelector("html").getAttribute("lang")
+    ) {
+      this.options.textToSpeechLang = document
+        .querySelector("html")
+        .getAttribute("lang");
     }
+    //inicialize Virtual Keyboard
+    vai_buscar_todos_campos_texto();
+    construtor_teclado_virtual._isMobile();
 
     disabledUnsupportedFeatures(this);
     this.sessionState = {
@@ -159,18 +167,6 @@ export class Accessibility {
     };
     common.injectFont(this.options.icon.fontFaceSrc, () => {
       this.build();
-      if (!this.options.icon.forceFont) {
-        common.isFontLoaded(this.options.icon.fontFamily, (isLoaded) => {
-          if (!isLoaded) {
-            common.warn(
-              `${this.options.icon.fontFamily} font was not loaded, using emojis instead`
-            );
-            fontFallback(this);
-            destroyAll();
-            this.build();
-          }
-        });
-      }
     });
   }
 
@@ -421,12 +417,7 @@ export class Accessibility {
         ._access-menu ul li.active svg path {
             fill: #fff;
         }
-        ._access-menu ul li:hover:before {
-            color: rgba(0,0,0,.8);
-        }
-        ._access-menu ul li.active:before {
-            color: #fff;
-        }
+        
         `;
     let className = "_access-main-css";
     common.injectStyle(css, { className: className });
@@ -786,8 +777,8 @@ export class Accessibility {
     for (let i of document.querySelectorAll("._access-menu ul li.active")) {
       i.classList.remove("active");
     }
-    // Following code, will destroy all Accessebility fiunctions. Including Icon amd side menu
-    // this.destroy();
+    // Following code, will destroy all Accessebility Elements (Icon amd side menu)
+    // destroy(); //call from the outer folder
   }
 
   callTecladoVirtual() {
@@ -908,6 +899,7 @@ export class Accessibility {
     this.menu = this.injectMenu();
     addListeners(this);
     disableUnsupportedModules(this);
+
     if (this.options.hotkeys.enabled) {
       document.onkeydown = function (e) {
         let act = Object.entries(self.options.hotkeys.keys).find(function (
@@ -932,7 +924,6 @@ export class Accessibility {
         }
       };
     }
-    //setMinHeight();
 
     this.icon.addEventListener(
       "click",
@@ -945,19 +936,6 @@ export class Accessibility {
       this.icon.style.opacity = "1";
     }, 10);
 
-    // if (window.SpeechSynthesisUtterance || window.speechSynthesis) {
-    //     let voices = window.speechSynthesis.getVoices();
-    // }
-    this.updateReadGuide = function (e) {
-      let newPos = 0;
-      if (e.type == "touchmove") {
-        newPos = e.changedTouches[0].clientY;
-      } else {
-        newPos = e.y;
-      }
-      document.getElementById("access_read_guide_bar").style.top =
-        newPos - (parseInt(self.options.guide.height.replace("px")) + 5) + "px";
-    };
     this.menuInterface = {
       increaselineHeight: () => {
         alterLineHeight(this, true);
@@ -995,12 +973,12 @@ export class Accessibility {
           this.initialValues.html.color = getComputedStyle(this.html).color;
 
         if (destroy) {
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.backgroundColor,
             this.html.style,
             "backgroundColor"
           );
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.color,
             this.html.style,
             "color"
@@ -1051,22 +1029,22 @@ export class Accessibility {
           this.initialValues.grayHues = false;
           this.sessionState.grayHues = this.initialValues.grayHues;
           this.onChange(true);
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.filter,
             this.html.style,
             "filter"
           );
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.webkitFilter,
             this.html.style,
             "webkitFilter"
           );
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.mozFilter,
             this.html.style,
             "mozFilter"
           );
-          this.resetIfDefined(
+          resetIfDefined(
             this.initialValues.html.msFilter,
             this.html.style,
             "msFilter"
@@ -1114,64 +1092,7 @@ export class Accessibility {
         this.html.classList.toggle("_access_cursor");
       },
       readingGuide: (destroy) => {
-        if (destroy) {
-          if (document.getElementById("access_read_guide_bar") != undefined) {
-            document.getElementById("access_read_guide_bar").remove();
-          }
-          document
-            .querySelector('._access-menu [data-access-action="readingGuide"]')
-            .classList.remove("active");
-          this.initialValues.readingGuide = false;
-          this.sessionState.readingGuide = this.initialValues.readingGuide;
-          this.onChange(true);
-          document.body.removeEventListener(
-            "touchmove",
-            this.updateReadGuide,
-            false
-          );
-          document.body.removeEventListener(
-            "mousemove",
-            this.updateReadGuide,
-            false
-          );
-          return;
-        }
-        document
-          .querySelector('._access-menu [data-access-action="readingGuide"]')
-          .classList.toggle("active");
-        this.initialValues.readingGuide = !this.initialValues.readingGuide;
-        this.sessionState.readingGuide = this.initialValues.readingGuide;
-        this.onChange(true);
-        if (this.initialValues.readingGuide) {
-          let read = document.createElement("div");
-          read.id = "access_read_guide_bar";
-          read.classList.add("access_read_guide_bar");
-          document.body.append(read);
-          document.body.addEventListener(
-            "touchmove",
-            this.updateReadGuide,
-            false
-          );
-          document.body.addEventListener(
-            "mousemove",
-            this.updateReadGuide,
-            false
-          );
-        } else {
-          if (document.getElementById("access_read_guide_bar") != undefined) {
-            document.getElementById("access_read_guide_bar").remove();
-          }
-          document.body.removeEventListener(
-            "touchmove",
-            this.updateReadGuide,
-            false
-          );
-          document.body.removeEventListener(
-            "mousemove",
-            this.updateReadGuide,
-            false
-          );
-        }
+        readingGuide(this, destroy);
       },
       textToSpeech: (destroy) => {
         textToSpeech(this, destroy);
@@ -1264,10 +1185,6 @@ export class Accessibility {
       },
     };
     if (this.options.session.persistent) setSessionFromCache(this);
-  }
-
-  resetIfDefined(src, dest, prop) {
-    if (typeof src !== "undefined") dest[prop] = src;
   }
 
   onChange(updateSession) {
