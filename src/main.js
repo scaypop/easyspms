@@ -109,7 +109,7 @@ let _options = {
     increaseText: true,
     decreaseText: true,
     increaselineHeight: true,
-    decreaselineHeight: true,
+    decreaselineHeight: false,
     increaseTextSpacing: true,
     decreaseTextSpacing: true,
     invertColors: true,
@@ -537,6 +537,7 @@ export class Accessibility {
                 "data-access-action": "keyboardNav",
                 class: "btn_geral",
                 id: "btn_keyboardnav",
+                tabindex: "0",
               },
               children: [
                 {
@@ -549,6 +550,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "decreaselineHeight",
+                tabindex: "0",
               },
               children: [
                 {
@@ -561,6 +563,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "increaselineHeight",
+                tabindex: "0",
               },
               children: [
                 {
@@ -573,6 +576,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "increaseText",
+                tabindex: "0",
               },
               children: [
                 {
@@ -585,6 +589,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "decreaseText",
+                tabindex: "0",
               },
               children: [
                 {
@@ -598,6 +603,7 @@ export class Accessibility {
               attrs: {
                 id: "virtual-keyboard",
                 "data-access-action": "tecladoVirtual",
+                tabindex: "0",
               },
               children: [
                 {
@@ -610,6 +616,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "increaseTextSpacing",
+                tabindex: "0",
               },
               children: [
                 {
@@ -622,6 +629,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "decreaseTextSpacing",
+                tabindex: "0",
               },
               children: [
                 {
@@ -634,6 +642,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "invertColors",
+                tabindex: "0",
                 title: parseKeys(this, this.options.hotkeys.keys.invertColors),
               },
               children: [
@@ -648,6 +657,7 @@ export class Accessibility {
               attrs: {
                 "data-access-action": "grayHues",
                 title: parseKeys(this, this.options.hotkeys.keys.grayHues),
+                tabindex: "0",
               },
               children: [
                 {
@@ -660,6 +670,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "linkHighlight",
+                tabindex: "0",
                 title: parseKeys(this, this.options.hotkeys.keys.linkHighlight),
               },
               children: [
@@ -673,6 +684,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "bigCursor",
+                tabindex: "0",
                 title: parseKeys(this, this.options.hotkeys.keys.bigCursor),
               },
               children: [
@@ -692,6 +704,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "readingGuide",
+                tabindex: "0",
                 title: parseKeys(this, this.options.hotkeys.keys.readingGuide),
               },
               children: [
@@ -705,6 +718,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "textToSpeech",
+                tabindex: "0",
               },
               children: [
                 {
@@ -717,6 +731,7 @@ export class Accessibility {
               type: "li",
               attrs: {
                 "data-access-action": "speechToText",
+                tabindex: "0",
               },
               children: [
                 {
