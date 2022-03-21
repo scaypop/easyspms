@@ -496,6 +496,7 @@ export class Accessibility {
               attrs: {
                 class: `_menu-close-btn _menu-btn ${this.options.icon.fontClass}`,
                 title: this.options.labels.closeTitle,
+                tabindex: "0",
               },
               children: [
                 {
@@ -513,6 +514,7 @@ export class Accessibility {
               attrs: {
                 class: `_menu-reset-btn _menu-btn ${this.options.icon.fontClass}`,
                 title: this.options.labels.resetTitle,
+                tabindex: "0",
               },
               children: [
                 {
