@@ -1,7 +1,8 @@
 "use strict";
+import resetIfDefined from "../utils/resetIfDefined/resetIfDefined.mjs";
 
 export default function resetLineHeight(self) {
-  self.resetIfDefined(
+  resetIfDefined(
     self.initialValues.body.lineHeight,
     self.body.style,
     "lineHeight"

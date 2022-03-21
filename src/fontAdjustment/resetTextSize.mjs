@@ -1,11 +1,8 @@
 "use strict";
+import resetIfDefined from "../utils/resetIfDefined/resetIfDefined.mjs";
 
 export default function resetTextSize(self) {
-  self.resetIfDefined(
-    self.initialValues.body.fontSize,
-    self.body.style,
-    "fontSize"
-  );
+  resetIfDefined(self.initialValues.body.fontSize, self.body.style, "fontSize");
   if (typeof self.htmlOrgFontSize !== "undefined")
     self.html.style.fontSize = self.htmlOrgFontSize;
   let all = document.querySelectorAll("[data-init-font-size]");

@@ -1,12 +1,13 @@
 "use strict";
+import resetIfDefined from "../utils/resetIfDefined/resetIfDefined.mjs";
 
 export default function resetTextSpace(self) {
-  self.resetIfDefined(
+  resetIfDefined(
     self.initialValues.body.wordSpacing,
     self.body.style,
     "wordSpacing"
   );
-  self.resetIfDefined(
+  resetIfDefined(
     self.initialValues.body.letterSpacing,
     self.body.style,
     "letterSpacing"

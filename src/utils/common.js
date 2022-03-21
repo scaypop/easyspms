@@ -74,38 +74,43 @@ let common = {
     return src;
   },
   injectFont(urls, callback) {
-    if (urls && urls.length) {
-      let head = document.getElementsByTagName("head")[0];
-      let counter = 0;
-      let onload = () => {
-        if (!--counter) callback();
-      };
-      urls.forEach((url) => {
-        let link = document.createElement("link");
-        link.type = "text/css";
-        link.rel = "stylesheet";
-        link.href = url;
-        link.className = `_access-font-icon-${counter++}`;
-        link.onload = onload;
-        common.deployedObjects.set("." + link.className, true);
-        head.appendChild(link);
-      });
+    try {
+      if (urls && urls.length) {
+        let head = document.getElementsByTagName("head")[0];
+        let counter = 0;
+        let onload = () => {
+          if (!--counter && callback !== undefined) {
+            return callback();
+          }
+        };
+        urls.forEach((url) => {
+          let link = document.createElement("link");
+          link.type = "text/css";
+          link.rel = "stylesheet";
+          link.href = url;
+          link.className = `_access-font-icon-${counter++}`;
+          link.onload = onload;
+          common.deployedObjects.set("." + link.className, true);
+          head.appendChild(link);
+        });
+      } else {
+        console.log("first");
+      }
+    } catch (error) {
+      console.log(`injectFonts Error: ${error}`);
     }
   },
   isFontLoaded(fontFamily, callback) {
     try {
       const onReady = () => {
-        return callback(document.fonts.check(`1em Roboto`));
+        return callback(document.fonts.check(`1em ${fontFamily}`));
       };
-      document.fonts.ready.then(
-        () => {
-          onReady();
-        },
-        () => {
-          onReady();
-        }
-      );
+      document.fonts.ready.then(() => {
+        console.log(fontFamily, "- Font loaded");
+        onReady();
+      });
     } catch (e) {
+      console.log(fontFamily, "Font was not loaded");
       return callback(true);
     }
   },
