@@ -1,4 +1,9 @@
 (function () {
+  /**
+   *******************************
+   * INIT TOOTIP
+   *******************************
+   */
   let accessibilityTootipBox = document.getElementById(
     "accessibilityTootipBox"
   );
@@ -40,6 +45,12 @@
       accessibilityTootipBox.style.left = "auto";
     }
   }
+
+  /**
+   *******************************
+   * FIM INIT TOOTIP
+   *******************************
+   */
 
   /**
    *******************************
@@ -94,9 +105,24 @@
     }
   });
 
+  //Recupera todos os elementos com a classe "hasText"
+  let allTexts = document.querySelectorAll(".hasText");
+
   /**
    *******************************
    * FIM ADICIONA "hasText"
+   *******************************
+   */
+
+  /**
+   *******************************
+   * INIT SPEAKER
+   *******************************
+   */
+  let speaker = new SpeechSynthesisUtterance();
+  /**
+   *******************************
+   * FIM INIT SPEAKER
    *******************************
    */
 
@@ -107,9 +133,6 @@
    */
 
   let btnDicio = document.getElementById("btnDicio");
-
-  //Recupera todos os elementos com a classe "hasText" para o dicionário encontrar as palavras
-  let allTexts = document.querySelectorAll(".hasText");
 
   /**
    * Adiciona separa frase em palavras, e adiciona o a tag "diciotext", após isso escuta eventos de "mouseenter" e "mouseleve" nas palavras
@@ -302,7 +325,6 @@
 
   let btnSpeaker = document.getElementById("btnSpeaker");
   let allImages = document.getElementsByTagName("img");
-  let speaker = new SpeechSynthesisUtterance();
 
   /**
    * Reproduz "alt" ao clicar na imagem
@@ -357,6 +379,7 @@
       image.removeEventListener("mouseout", _imageMouseOut);
     }
     _hideTootip();
+    speechSynthesis.cancel();
   }
 
   /**
@@ -386,6 +409,82 @@
   /**
    ******************************
    * FINALIZA REPRODUTOR DE IMAGENS
+   ******************************
+   */
+
+  /**
+   ******************************
+   * LEITURA DE TEXTOS
+   ******************************
+   */
+
+  /**
+   * Ao clicar no texto, executa a leitura
+   * @param {MouseEvent} event
+   */
+  function _onClickTextSpeaker(event) {
+    speaker.lang = "pt-BR";
+    speaker.text = "Não foi possível ser o texto";
+
+    let parentEl = event.target.parentElement;
+
+    let childWithHasText = parentEl.getElementsByClassName("hasText");
+
+    if (!!childWithHasText.length) {
+      speaker.text = parentEl.innerText;
+    } else {
+      let text = event.target.innerText;
+      if (!!text) {
+        speaker.text = text;
+      }
+    }
+
+    speechSynthesis.speak(speaker);
+  }
+
+  /**
+   * Ativa evento "click" para leitura do texto
+   */
+  function _enableTextSpeaker() {
+    allTexts.forEach((textElement) => {
+      textElement.addEventListener("click", _onClickTextSpeaker);
+    });
+  }
+
+  /**
+   * Desativa evento "click" para leitura do texto
+   */
+  function _disableTextSpeaker() {
+    allTexts.forEach((textElement) => {
+      textElement.removeEventListener("click", _onClickTextSpeaker);
+    });
+    speechSynthesis.cancel();
+  }
+
+  let btnTextSpeaker = document.getElementById("btnTextSpeaker");
+
+  function _toogleTextSpeaker(e) {
+    e.preventDefault();
+    if (btnTextSpeaker.classList.contains("btn-outline-primary")) {
+      _enableTextSpeaker();
+      btnTextSpeaker.classList.remove("btn-outline-primary");
+      btnTextSpeaker.classList.add("btn-primary");
+      btnTextSpeaker.innerText = "Desativar reprodutor de texto";
+    } else {
+      _disableTextSpeaker();
+      btnTextSpeaker.classList.remove("btn-primary");
+      btnTextSpeaker.classList.add("btn-outline-primary");
+      btnTextSpeaker.innerText = "Ativar reprodutor de texto";
+    }
+
+    btnTextSpeaker.blur();
+  }
+
+  btnTextSpeaker.addEventListener("click", _toogleTextSpeaker);
+
+  /**
+   ******************************
+   * FINALIZA LEITURA DE TEXTOS
    ******************************
    */
 })();
