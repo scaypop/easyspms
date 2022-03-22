@@ -280,7 +280,42 @@
 
             </div>
 
+<div class="VoicetoText">
+        <div class="mt-4" id="div_language">
+                <h2 class="mb-3">Idioma</h2>
+            <div class="row">
+                <div class="col-sm-4">
+                    <select class="form-select bg-secondary text-light" id="select_language" onchange="updateCountry()"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <select class="form-select bg-secondary text-light mt-2" id="select_dialect"></select>
+                </div>
+            </div>
+                    
 
+        </div>
+            <h2 class="mt-4 ">Transcrição</h2>
+            <div class="p-3" style="border: 1px solid gray; height: 300px; border-radius: 8px;">
+                <span id="final" ></span>
+                <span id="interim" class="text-secondary"></span>
+            </div>
+          
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-success btn-sm" id="start">Iniciar</button> </div>
+                        <div class="col-sm-2"><button type="button" class="btn btn-danger" id="stop">Parar</button></div>
+                        <div class="col-sm-2"><button type="button"  class="btn btn-primary" id="limpar">Limpar</button></div>
+                   
+                   </div>
+           
+                
+                
+                <p id="status" class="lead mt-3 text-light" style="display: none">A vouvir ...</p>
+            </div>
+        
+ </div>
 <!--'Botão funcionalidade-> navegação por teclado '-->
    <div class="btn_geral" id="btn_keyboardnav">
     <div class="btn_particular">
@@ -299,7 +334,13 @@
     </div>
 <!--Fim do visto a verde que aparece quando a funcionalidade está ativa-->
     </div>
- 
+ <!---  Voice to TEXT -->
+
+<br>
+<hr>
+
+    
+  
 
 <!--Imagem do botão-->
 <div class="btn_imagem">
@@ -399,7 +440,7 @@
 <!--<button type="button" id="lupaTotal" style="width: 100px; height: 100px;">Ampliador de Texto (Lupa)</button><br>
 <button type="button" id="lupaParcial" style="width: 100px; height: 100px;">Guia de Leitura</button><br>
 <button type="button"  id="desligaAlteracoes" style="width: 100px; height: 100px;" data-toggle="tooltip" data-placement="bottom" >Desligar Alterações-->
-</button><br>
+                            </button><br>
 
             <hr class="my-5">
             <!--
@@ -426,7 +467,7 @@
 
                 <!-- INIT PROPRIETARY HTML -->
                 <hr class="my-5">
-            </div>
+    </div>
             <!--
     PAVLO PLAYGROUND END
 -->
@@ -1135,6 +1176,11 @@ on our API rather than parse the HTML below, we have XML and JSON available.
     <!--
     MARCIO SECTION END
 -->
+
+<!---script Voice to Text -->
+
+<script src="src/VoiceTotext/VoiceToText.js"></script>
+<script src="src/VoiceTotext/language.js"></script>
 
     <!-- THE END -->
     <!--
